@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dating App</title>
+</head>
+<body>
+    <h1>Upload Your Photo and Description</h1>
+    <form id="uploadForm">
+        <input type="file" id="image" name="image" accept="image/*" required>
+        <br><br>
+        <textarea id="description" name="description" placeholder="Enter your description..." required></textarea>
+        <br><br>
+        <button type="submit">Find Matches</button>
+    </form>
+
+    <h2>Matches:</h2>
+    <pre id="results"></pre>
+
+    <script>
+        document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append("image", document.getElementById("image").files[0]);
+            formData.append("description", document.getElementById("description").value);
+
+            const response = await fetch("http://127.0.0.1:5000/match", {
+                method: "POST",
+                body: formData
+            });
+
+            const result = await response.json();
+            document.getElementById("results").textContent = JSON.stringify(result, null, 2);
+        });
+    </script>
+</body>
+</html>
